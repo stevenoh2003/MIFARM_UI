@@ -60,19 +60,37 @@ export default function Home() {
     }
   };
 
+  // Poll for new commands every 2 seconds
+  const pollForNewLogs = async () => {
+    try {
+      const response = await fetch("/api/get-logs");
+      const data = await response.json();
+
+      // Add new commands to the log without resetting
+      setLogs((prevLogs) => {
+        const newLogs = data.filter(
+          (log) => !prevLogs.some((prevLog) => prevLog._id === log._id)
+        );
+        return [...prevLogs, ...newLogs];
+      });
+    } catch (error) {
+      console.error("Error polling for new logs:", error);
+    }
+  };
+
   // Fetch logs on mount and set up real-time updates
   useEffect(() => {
     fetchLogs(); // Fetch all logs immediately
-    const interval = setInterval(fetchLogs, 2000); // Check for new logs every 2 seconds
+    const interval = setInterval(pollForNewLogs, 2000); // Poll for new logs every 2 seconds
     return () => clearInterval(interval); // Clean up on component unmount
   }, []);
 
   return (
-    <div className="flex min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
-      <main className="flex flex-col gap-8 w-1/2">
+    <div className="flex flex-col min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
+      <main className="flex flex-col items-center justify-center gap-8 w-full max-w-lg mx-auto">
         <div className="text-4xl font-bold mb-6 text-blue-600">MIFARM</div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <input
             type="number"
             value={fieldOne}
@@ -82,13 +100,13 @@ export default function Home() {
           />
           <button
             onClick={handleFirstCommand}
-            className="rounded-lg border-none bg-blue-600 text-white py-3 hover:bg-blue-700 transition-colors"
+            className="rounded-lg border-none bg-blue-600 text-white py-3 w-full hover:bg-blue-700 transition-colors"
           >
             Send Z Height
           </button>
         </div>
 
-        <div className="flex flex-col gap-4 mt-6">
+        <div className="flex flex-col gap-4 mt-6 w-full">
           <input
             type="number"
             value={fieldTwo}
@@ -112,13 +130,34 @@ export default function Home() {
           />
           <button
             onClick={handleSecondCommand}
-            className="rounded-lg border-none bg-green-600 text-white py-3 hover:bg-green-700 transition-colors"
+            className="rounded-lg border-none bg-green-600 text-white py-3 w-full hover:bg-green-700 transition-colors"
           >
             Send Joint Values
           </button>
         </div>
-      </main>
 
+        <div className="flex flex-col w-full mt-10">
+          <h2 className="text-xl font-semibold mb-4">Log History</h2>
+          <div className="bg-white p-4 rounded-lg shadow-md h-64 overflow-y-auto">
+            {logs.length > 0 ? (
+              logs.map((log, index) => (
+                <div key={log._id} className="mb-2 p-2 border-b">
+                  {log.z_height ? (
+                    <p>Z Height: {log.z_height}</p>
+                  ) : (
+                    <p>
+                      Joint 1: {log.joint1}, Joint 2: {log.joint2}, Gripper:{" "}
+                      {log.gripper}
+                    </p>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p>No recent movements found.</p>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -95,7 +95,7 @@ export default function Home() {
             type="number"
             value={fieldOne}
             onChange={(e) => setFieldOne(e.target.value)}
-            placeholder="Enter Z Height"
+            placeholder="Enter Z Height (relative)"
             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
@@ -111,21 +111,21 @@ export default function Home() {
             type="number"
             value={fieldTwo}
             onChange={(e) => setFieldTwo(e.target.value)}
-            placeholder="Enter Joint 1"
+            placeholder="Enter Joint 1 (40~170)"
             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="number"
             value={fieldThree}
             onChange={(e) => setFieldThree(e.target.value)}
-            placeholder="Enter Joint 2"
+            placeholder="Enter Joint 2 (0~170)"
             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="number"
             value={fieldFour}
             onChange={(e) => setFieldFour(e.target.value)}
-            placeholder="Enter Gripper"
+            placeholder="Enter Gripper (40~180)"
             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button

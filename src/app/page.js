@@ -119,27 +119,6 @@ export default function Home() {
         </div>
       </main>
 
-      <aside className="w-1/2">
-        <h2 className="text-xl font-semibold mb-4">Recent Movements</h2>
-        <div className="bg-white p-4 rounded-lg shadow-md h-full overflow-y-auto">
-          {logs.length > 0 ? (
-            logs.map((log, index) => (
-              <div key={log._id} className="mb-2 p-2 border-b">
-                {log.z_height ? (
-                  <p>Z Height: {log.z_height}</p>
-                ) : (
-                  <p>
-                    Joint 1: {log.joint1}, Joint 2: {log.joint2}, Gripper:{" "}
-                    {log.gripper}
-                  </p>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No recent movements found.</p>
-          )}
-        </div>
-      </aside>
     </div>
   );
 }
